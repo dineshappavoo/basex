@@ -50,6 +50,8 @@ Passed! decoded value is the same as the original. All set to Gooooooooo!!!
 
 $go get "github.com/dineshappavoo/basex"
 
+##Referrence
+* [Kevin van Zonneveld's Blog](http://kvz.io/blog/2009/06/10/create-short-ids-with-php-like-youtube-or-tinyurl/)
 
   
 ##Project Contributor(s)
