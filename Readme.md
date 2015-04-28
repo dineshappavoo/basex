@@ -9,6 +9,7 @@ The alphabet has 26 characters. That's a lot more than 10 digits. If we also dis
 
 ###Usage
 
+```go
 package main
 
 import (
@@ -32,6 +33,7 @@ func main() {
 		fmt.Println("FAILED! decoded value is NOT the same as the original!!")
 	}
 }
+```
 
 
 
