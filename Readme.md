@@ -1,7 +1,7 @@
 basex
 =====
 A native golang implementation for basex encoding which produces youtube like video id.
-Unfortunately there are only 10 digits to work with, so if you have a lot of records, IDs tend to get very lengthy. We could borrow characters from the alphabet as have them pose as additional numbers.
+There are only 10 digits to work with, so if you have a lot of records to maintain in the application, IDs tend to get very lengthy. `uuidgen` gives a very lengthy value. We can use characters from the alphabet as have them pose as additional numbers.
 
 Or how to create IDs similar to YouTube e.g. yzNjIBEdyww
 
