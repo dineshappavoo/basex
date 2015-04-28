@@ -35,6 +35,15 @@ func main() {
 }
 ```
 
+####output looks like,
+
+```go
+Input :  3457348753573458734583
+Encoded :  14RKHyDF1bU51
+Decoded :  3457348753573458734583
+Passed! decoded value is the same as the original. All set to Gooooooooo!!!
+```
+
 
 
 ##Install
