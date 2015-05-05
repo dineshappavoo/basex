@@ -48,7 +48,7 @@ Passed! decoded value is the same as the original. All set to Gooooooooo!!!
 
 ##Install
 
-```unix
+```shell
 go get github.com/dineshappavoo/basex
 ```
 ##Referrence
