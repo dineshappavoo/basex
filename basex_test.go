@@ -26,3 +26,17 @@ func TestBasex(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkEncode(b *testing.B) {
+	s := "9007199254740989"
+	for n := 0; n < b.N; n++ {
+		_ = Encode(s)
+	}
+}
+
+func BenchmarkDecode(b *testing.B) {
+	s := "2aYls9bkamJJSwhr0"
+	for n := 0; n < b.N; n++ {
+		_ = Decode(s)
+	}
+}
