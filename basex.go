@@ -8,17 +8,12 @@ import (
 )
 
 var (
-	dictionary = []char{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+	dictionary = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
 )
-
-type char byte
-func (c char)String()string{
-  return string(c)
-}
 
 //Converts the big integer to alpha id(An alpha numeric id with mixed cases)
 func Encode(val string) string{
-	var result []char
+	var result []byte
 	var index int
 	var strVal string
 
@@ -60,8 +55,8 @@ func Decode(s string) string {
     chars2 := sliceVal(reverse(s))
 
     //for efficiency, make a map
-    var dictMap map[char]*big.Int
-	dictMap = make(map[char]*big.Int)
+    var dictMap map[byte]*big.Int
+	dictMap = make(map[byte]*big.Int)
 
     j := 0
     for _,val := range dictionary {
@@ -88,7 +83,7 @@ func Decode(s string) string {
     return bi.String()  
 }
 
-func stringVal(s []char) string {
+func stringVal(s []byte) string {
 	var str string
 	for _,val := range s {
 		str = str + string(val)
@@ -97,11 +92,11 @@ func stringVal(s []char) string {
 	return str
 }
 
-func sliceVal(s string) []char {
-	var ch char
-	var p []char // == nil
+func sliceVal(s string) []byte {
+	var ch byte
+	var p []byte // == nil
 	for i := 0; i < len(s); i++ {
-		ch = char([]rune(s)[i])
+		ch = byte([]rune(s)[i])
             p = append(p, ch)
         }
     return p
