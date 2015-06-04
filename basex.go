@@ -46,13 +46,13 @@ func Encode(val string) string {
 	}
 
 	//need to reverse it, since the start of the list contains the least significant values
-	return reverse(stringVal(result))
+	return string(reverse(result))
 }
 
 //Converts the alpha id to big integer
 func Decode(s string) string {
 	//reverse it, coz its already reversed!
-	chars2 := sliceVal(reverse(s))
+	chars2 := reverse([]byte(s))
 
 	//for efficiency, make a map
 	var dictMap map[byte]*big.Int
@@ -82,29 +82,9 @@ func Decode(s string) string {
 	return bi.String()
 }
 
-func stringVal(s []byte) string {
-	var str string
-	for _, val := range s {
-		str = str + string(val)
+func reverse(bs []byte) []byte {
+	for i, j := 0, len(bs)-1; i < j; i, j = i+1, j-1 {
+		bs[i], bs[j] = bs[j], bs[i]
 	}
-
-	return str
-}
-
-func sliceVal(s string) []byte {
-	var ch byte
-	var p []byte // == nil
-	for i := 0; i < len(s); i++ {
-		ch = byte([]rune(s)[i])
-		p = append(p, ch)
-	}
-	return p
-}
-
-func reverse(s string) string {
-	rs := []byte(s)
-	for i, j := 0, len(rs)-1; i < j; i, j = i+1, j-1 {
-		rs[i], rs[j] = rs[j], rs[i]
-	}
-	return string(rs)
+	return bs
 }
