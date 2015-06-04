@@ -7,19 +7,9 @@ import (
 	"strconv"
 )
 
-var vDICTIONARY_16 []char
-var vDICTIONARY_32 []char
-var vDICTIONARY_62 []char
-var vDICTIONARY_89 []char
-var dictionary []char
-
-func initialize() {
-	vDICTIONARY_16 = []char{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}
-	vDICTIONARY_32 = []char{'1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
-	vDICTIONARY_62 = []char{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
-	vDICTIONARY_89 = []char{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '+', '"', '@', '*', '#', '%', '&', '/', '|', '(', ')', '=', '?', '~', '[', ']', '{', '}', '$', '-', '_', '.', ':', ',', ';', '<', '>'}
-	dictionary = vDICTIONARY_62	
-}
+var (
+	dictionary = []char{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+)
 
 type char byte
 func (c char)String()string{
@@ -28,8 +18,6 @@ func (c char)String()string{
 
 //Converts the big integer to alpha id(An alpha numeric id with mixed cases)
 func Encode(val string) string{
-	//Initialize dictionary
-	initialize()
 	var result []char
 	var index int
 	var strVal string
@@ -68,8 +56,6 @@ func Encode(val string) string{
 
 //Converts the alpha id to big integer
 func Decode(s string) string {
-	//Initialize dictionary
-	initialize()
     //reverse it, coz its already reversed!
     chars2 := sliceVal(reverse(s))
 
