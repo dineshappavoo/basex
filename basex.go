@@ -11,7 +11,7 @@ var (
 	dictionary = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
 )
 
-//Converts the big integer to alpha id(An alpha numeric id with mixed cases)
+// Encode converts the big integer to alpha id (an alphanumeric id with mixed cases)
 func Encode(val string) string {
 	var result []byte
 	var index int
@@ -31,9 +31,9 @@ func Encode(val string) string {
 	for remaining.Cmp(big.NewInt(0)) != 0 {
 
 		a.Exp(base, big.NewInt(int64(exponent)), nil) //16^1 = 16
-		b := b.Mod(remaining, a)                      //119 % 16 = 7 | 112 % 256 = 112
-		c := c.Exp(base, big.NewInt(int64(exponent-1)), nil)
-		d := d.Div(b, c)
+		b = b.Mod(remaining, a)                      //119 % 16 = 7 | 112 % 256 = 112
+		c = c.Exp(base, big.NewInt(int64(exponent-1)), nil)
+		d = d.Div(b, c)
 
 		//if d > dictionary.length, we have a problem. but BigInteger doesnt have
 		//a greater than method :-(  hope for the best. theoretically, d is always
@@ -49,7 +49,7 @@ func Encode(val string) string {
 	return string(reverse(result))
 }
 
-//Converts the alpha id to big integer
+// Decode converts the alpha id to big integer
 func Decode(s string) string {
 	//reverse it, coz its already reversed!
 	chars2 := reverse([]byte(s))
