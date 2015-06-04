@@ -29,9 +29,8 @@ func Encode(val string) string {
 	remaining.SetString(val, 10)
 
 	for remaining.Cmp(big.NewInt(0)) != 0 {
-
 		a.Exp(base, big.NewInt(int64(exponent)), nil) //16^1 = 16
-		b = b.Mod(remaining, a)                      //119 % 16 = 7 | 112 % 256 = 112
+		b = b.Mod(remaining, a)                       //119 % 16 = 7 | 112 % 256 = 112
 		c = c.Exp(base, big.NewInt(int64(exponent-1)), nil)
 		d = d.Div(b, c)
 
@@ -55,8 +54,7 @@ func Decode(s string) string {
 	chars2 := reverse([]byte(s))
 
 	//for efficiency, make a map
-	var dictMap map[byte]*big.Int
-	dictMap = make(map[byte]*big.Int)
+	dictMap := make(map[byte]*big.Int)
 
 	j := 0
 	for _, val := range dictionary {
