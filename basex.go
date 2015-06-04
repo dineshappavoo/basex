@@ -12,7 +12,7 @@ var (
 )
 
 //Converts the big integer to alpha id(An alpha numeric id with mixed cases)
-func Encode(val string) string{
+func Encode(val string) string {
 	var result []byte
 	var index int
 	var strVal string
@@ -31,64 +31,63 @@ func Encode(val string) string{
 	for remaining.Cmp(big.NewInt(0)) != 0 {
 
 		a.Exp(base, big.NewInt(int64(exponent)), nil) //16^1 = 16
-		b := b.Mod(remaining, a)   //119 % 16 = 7 | 112 % 256 = 112
-		c := c.Exp(base, big.NewInt(int64(exponent - 1)), nil)
+		b := b.Mod(remaining, a)                      //119 % 16 = 7 | 112 % 256 = 112
+		c := c.Exp(base, big.NewInt(int64(exponent-1)), nil)
 		d := d.Div(b, c)
 
 		//if d > dictionary.length, we have a problem. but BigInteger doesnt have
 		//a greater than method :-(  hope for the best. theoretically, d is always
 		//an index of the dictionary!
 		strVal = d.String()
-		index,_ = strconv.Atoi(strVal)
+		index, _ = strconv.Atoi(strVal)
 		result = append(result, dictionary[index])
 		remaining = remaining.Sub(remaining, b) //119 - 7 = 112 | 112 - 112 = 0
 		exponent = exponent + 1
 	}
 
 	//need to reverse it, since the start of the list contains the least significant values
-	 return reverse(stringVal(result))
+	return reverse(stringVal(result))
 }
 
 //Converts the alpha id to big integer
 func Decode(s string) string {
-    //reverse it, coz its already reversed!
-    chars2 := sliceVal(reverse(s))
+	//reverse it, coz its already reversed!
+	chars2 := sliceVal(reverse(s))
 
-    //for efficiency, make a map
-    var dictMap map[byte]*big.Int
+	//for efficiency, make a map
+	var dictMap map[byte]*big.Int
 	dictMap = make(map[byte]*big.Int)
 
-    j := 0
-    for _,val := range dictionary {
-    	dictMap[val] = big.NewInt(int64(j))
-    	j = j+1
-    }
+	j := 0
+	for _, val := range dictionary {
+		dictMap[val] = big.NewInt(int64(j))
+		j = j + 1
+	}
 
-    bi := big.NewInt(0)
+	bi := big.NewInt(0)
 	base := big.NewInt(int64(len(dictionary)))
 
-    exponent := 0;
+	exponent := 0
 	a := big.NewInt(0)
 	b := big.NewInt(0)
 	intermed := big.NewInt(0)
 
-
-    for _,c := range chars2 {
-      a = dictMap[c]
-      intermed = intermed.Exp(base, big.NewInt(int64(exponent)), nil)
-      b = b.Mul(intermed, a)
-      bi = bi.Add(bi, b)
-      exponent = exponent+1
-    }
-    return bi.String()  
+	for _, c := range chars2 {
+		a = dictMap[c]
+		intermed = intermed.Exp(base, big.NewInt(int64(exponent)), nil)
+		b = b.Mul(intermed, a)
+		bi = bi.Add(bi, b)
+		exponent = exponent + 1
+	}
+	return bi.String()
 }
 
 func stringVal(s []byte) string {
 	var str string
-	for _,val := range s {
+	for _, val := range s {
 		str = str + string(val)
 	}
-	
+
 	return str
 }
 
@@ -97,16 +96,15 @@ func sliceVal(s string) []byte {
 	var p []byte // == nil
 	for i := 0; i < len(s); i++ {
 		ch = byte([]rune(s)[i])
-            p = append(p, ch)
-        }
-    return p
+		p = append(p, ch)
+	}
+	return p
 }
 
-
 func reverse(s string) string {
-    runes := []rune(s)
-    for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-        runes[i], runes[j] = runes[j], runes[i]
-    }
-    return string(runes)
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
 }
