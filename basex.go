@@ -1,6 +1,7 @@
+// Package basex generates alpha id (alphanumeric id) for big integers.  This
+// is particularly useful for shortening URLs.
 package basex
-//basex is an go implementation to generate alpha id (alpha numeric id) for big integers. 
-//This will be very helpful to shorten the URL
+
 import (
 	"math/big"
 	"strconv"
@@ -20,8 +21,6 @@ func initialize() {
 	dictionary = vDICTIONARY_62	
 }
 
-
-//These lines are mandatory to use the char in golang
 type char byte
 func (c char)String()string{
   return string(c)
