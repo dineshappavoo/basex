@@ -13,6 +13,10 @@ func TestBasex(t *testing.T) {
 		{"9007199254740989"},
 		{"123456789012345678901234567890"},
 		{"1234"},
+		{"test/test/123"},
+		{"https://tour.golang.org"},
+		{"https://blog.golang.org"},
+		{"http://golang.org/doc/#learning"},
 	}
 	for _, c := range cases {
 		encode := Encode(c.in)
