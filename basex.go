@@ -102,9 +102,9 @@ func sliceVal(s string) []byte {
 }
 
 func reverse(s string) string {
-	runes := []rune(s)
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
+	rs := []byte(s)
+	for i, j := 0, len(rs)-1; i < j; i, j = i+1, j-1 {
+		rs[i], rs[j] = rs[j], rs[i]
 	}
-	return string(runes)
+	return string(rs)
 }
