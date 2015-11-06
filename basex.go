@@ -3,10 +3,10 @@
 package basex
 
 import (
+	"errors"
 	"math/big"
 	"strconv"
-        "unicode"
-        "errors"
+	"unicode"
 )
 
 var (
@@ -16,9 +16,9 @@ var (
 //checks if given string is a valid numeric
 func isValidNumeric(s string) bool {
 	for _, r := range s {
-	        if !unicode.IsNumber(r) {
-	            return false
-	        }
+		if !unicode.IsNumber(r) {
+			return false
+		}
 	}
 	return true
 }
@@ -34,11 +34,11 @@ func isAsciiPrintable(s string) bool {
 }
 
 // Encode converts the big integer to alpha id (an alphanumeric id with mixed cases)
-func Encode(val string) (string, error) {
-        //numeric validation
-        if !isValidNumeric(val) {
-            return "", errors.New("Encode string is not a valid numeric")
-        }
+func Encode(s string) (string, error) {
+	//numeric validation
+	if !isValidNumeric(s) {
+		return "", errors.New("Encode string is not a valid numeric")
+	}
 	var result []byte
 	var index int
 	var strVal string
@@ -52,7 +52,7 @@ func Encode(val string) (string, error) {
 	exponent := 1
 
 	remaining := big.NewInt(0)
-	remaining.SetString(val, 10)
+	remaining.SetString(s, 10)
 
 	for remaining.Cmp(big.NewInt(0)) != 0 {
 		a.Exp(base, big.NewInt(int64(exponent)), nil) //16^1 = 16
@@ -75,11 +75,11 @@ func Encode(val string) (string, error) {
 }
 
 // Decode converts the alpha id to big integer
-func Decode(s string) (string, error){
-        //Validate if given string is valid
-        if !isAsciiPrintable(s) {
-            return "", errors.New("Decode string is not valid.[a-z, A_Z, 0-9] only allowed")
-        }
+func Decode(s string) (string, error) {
+	//Validate if given string is valid
+	if !isAsciiPrintable(s) {
+		return "", errors.New("Decode string is not valid.[a-z, A_Z, 0-9] only allowed")
+	}
 	//reverse it, coz its already reversed!
 	chars2 := reverse([]byte(s))
 

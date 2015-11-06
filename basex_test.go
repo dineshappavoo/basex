@@ -16,13 +16,13 @@ func TestBasexSuccess(t *testing.T) {
 	}
 	for _, c := range cases {
 		encode, err := Encode(c.in)
-                if err!=nil {
-		    t.Errorf("Encode error:%q", err)
-                }
+		if err != nil {
+			t.Errorf("Encode error:%q", err)
+		}
 		decode, err := Decode(encode)
-                if err!=nil {
-		    t.Errorf("Decode error:%q", err)
-                }
+		if err != nil {
+			t.Errorf("Decode error:%q", err)
+		}
 		if c.in != decode {
 			t.Errorf("Encode(%q) == %q, Decode %q", c.in, encode, decode)
 		}
@@ -46,7 +46,6 @@ func TestBasexFailure(t *testing.T) {
 		}
 	}
 }
-
 
 func BenchmarkEncode(b *testing.B) {
 	s := "9007199254740989"
