@@ -23,10 +23,16 @@ func main() {
 	input := "123456789012345678901234567890"
 	fmt.Println("Input : ", input)
 
-	encoded := basex.Encode(input)
+	encoded, err := basex.Encode(input)
+        if err!=nil {
+            fmt.Println(err)
+        }
 	fmt.Println("Encoded : ", encoded)
 
-	decoded := basex.Decode(encoded)
+	decoded, err := basex.Decode(encoded)
+        if err!=nil {
+            fmt.Println(err)
+        }
 	fmt.Println("Decoded : ", decoded)
 
 	if input == decoded {
