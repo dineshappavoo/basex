@@ -5,14 +5,40 @@ package basex
 import (
 	"math/big"
 	"strconv"
+        "unicode"
+        "errors"
 )
 
 var (
 	dictionary = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
 )
 
+//checks if given string is a valid numeric
+func isValidNumeric(s string) bool {
+	for _, r := range s {
+	        if !unicode.IsNumber(r) {
+	            return false
+	        }
+	}
+	return true
+}
+
+// checks if s is ascii and printable, aka doesn't include tab, backspace, etc.
+func isAsciiPrintable(s string) bool {
+	for _, r := range s {
+		if r > unicode.MaxASCII || !unicode.IsPrint(r) {
+			return false
+		}
+	}
+	return true
+}
+
 // Encode converts the big integer to alpha id (an alphanumeric id with mixed cases)
-func Encode(val string) string {
+func Encode(val string) (string, error) {
+        //numeric validation
+        if !isValidNumeric(val) {
+            return "", errors.New("Encode string is not a valid numeric")
+        }
 	var result []byte
 	var index int
 	var strVal string
@@ -45,11 +71,15 @@ func Encode(val string) string {
 	}
 
 	//need to reverse it, since the start of the list contains the least significant values
-	return string(reverse(result))
+	return string(reverse(result)), nil
 }
 
 // Decode converts the alpha id to big integer
-func Decode(s string) string {
+func Decode(s string) (string, error){
+        //Validate if given string is valid
+        if !isAsciiPrintable(s) {
+            return "", errors.New("Decode string is not valid.[a-z, A_Z, 0-9] only allowed")
+        }
 	//reverse it, coz its already reversed!
 	chars2 := reverse([]byte(s))
 
@@ -77,7 +107,7 @@ func Decode(s string) string {
 		bi = bi.Add(bi, b)
 		exponent = exponent + 1
 	}
-	return bi.String()
+	return bi.String(), nil
 }
 
 func reverse(bs []byte) []byte {

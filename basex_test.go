@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestBasex(t *testing.T) {
+func TestBasexSuccess(t *testing.T) {
 	cases := []struct {
 		in string
 	}{
@@ -13,30 +13,51 @@ func TestBasex(t *testing.T) {
 		{"9007199254740989"},
 		{"123456789012345678901234567890"},
 		{"1234"},
-		{"test/test/123"},
-		{"https://tour.golang.org"},
-		{"https://blog.golang.org"},
-		{"http://golang.org/doc/#learning"},
 	}
 	for _, c := range cases {
-		encode := Encode(c.in)
-		decode := Decode(encode)
+		encode, err := Encode(c.in)
+                if err!=nil {
+		    t.Errorf("Encode error:%q", err)
+                }
+		decode, err := Decode(encode)
+                if err!=nil {
+		    t.Errorf("Decode error:%q", err)
+                }
 		if c.in != decode {
 			t.Errorf("Encode(%q) == %q, Decode %q", c.in, encode, decode)
 		}
 	}
 }
 
+func TestBasexFailure(t *testing.T) {
+	cases := []struct {
+		in string
+	}{
+		{"test/test/123"},
+		{"https://tour.golang.org"},
+		{"https://blog.golang.org"},
+		{"http://golang.org/doc/#learning"},
+	}
+	for _, c := range cases {
+		encode, _ := Encode(c.in)
+		decode, _ := Decode(encode)
+		if c.in == decode {
+			t.Errorf("Encode(%q) == %q, Decode %q", c.in, encode, decode)
+		}
+	}
+}
+
+
 func BenchmarkEncode(b *testing.B) {
 	s := "9007199254740989"
 	for n := 0; n < b.N; n++ {
-		_ = Encode(s)
+		_, _ = Encode(s)
 	}
 }
 
 func BenchmarkDecode(b *testing.B) {
 	s := "2aYls9bkamJJSwhr0"
 	for n := 0; n < b.N; n++ {
-		_ = Decode(s)
+		_, _ = Decode(s)
 	}
 }
