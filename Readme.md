@@ -9,6 +9,8 @@ Or how to create IDs similar to YouTube e.g. yzNjIBEdyww
 
 The alphabet has 26 characters. That's a lot more than 10 digits. If we also distinguish upper- and lowercase, and add digits to the bunch or the heck of it, we already have (26 x 2 + 10) 62 options we can use per position in the ID. Please note that this package only takes numeric inputs.
 
+####Note: As of 11/14/2015 version 0.1.0 has a breaking change which has new 'error' return type.
+
 ###Usage
 
 ```go
