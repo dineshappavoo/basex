@@ -1,6 +1,6 @@
 basex   
 =======
-[![GoDoc](https://godoc.org/github.com/dineshappavoo/basex?status.svg)](https://godoc.org/github.com/dineshappavoo/basex) [![Build Status](https://travis-ci.org/dineshappavoo/basex.svg?branch=master)](https://travis-ci.org/dineshappavoo/basex) [![Install Howti](http://127.0.0.1:8080/resources/img/2.jpg)](http://howti.io/viewhowti/GI)
+[![GoDoc](https://godoc.org/github.com/dineshappavoo/basex?status.svg)](https://godoc.org/github.com/dineshappavoo/basex) [![Build Status](https://travis-ci.org/dineshappavoo/basex.svg?branch=master)](https://travis-ci.org/dineshappavoo/basex) [![Install Howti](https://img.shields.io/badge/install-howti-orange.svg?branch=master)](http://howti.io/viewhowti/GI)
 
 A native golang implementation for basex encoding which produces youtube like video id.
 There are only 10 digits to work with, so if you have a lot of records to maintain in the application, IDs tend to get very lengthy. `uuidgen` gives a very lengthy value. We can use characters from the alphabet as have them pose as additional numbers.
