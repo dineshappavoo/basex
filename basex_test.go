@@ -2,6 +2,7 @@ package basex
 
 import (
 	"testing"
+        "strconv"
 )
 
 func TestBasexSuccess(t *testing.T) {
@@ -43,6 +44,22 @@ func TestBasexFailure(t *testing.T) {
 		decode, _ := Decode(encode)
 		if c.in == decode {
 			t.Errorf("Encode(%q) == %q, Decode %q", c.in, encode, decode)
+		}
+	}
+}
+
+func  TestForLargeInputs(t *testing.T) {
+	for i:=1000;i<3000000;i++ {
+		encode, err := Encode(strconv.Itoa(i))
+		if err != nil {
+			t.Errorf("Encode error:%q", err)
+		}
+		decode, err := Decode(encode)
+		if err != nil {
+			t.Errorf("Decode error:%q", err)
+		}
+		if strconv.Itoa(i) != decode {
+			t.Errorf("Encode(%q) == %q, Decode %q", i, encode, decode)
 		}
 	}
 }
