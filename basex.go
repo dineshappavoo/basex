@@ -11,7 +11,12 @@ import (
 
 var (
 	dictionary = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+	base       *big.Int
 )
+
+func init() {
+	base = big.NewInt(int64(len(dictionary)))
+}
 
 //checks if given string is a valid numeric
 func isValidNumeric(s string) bool {
@@ -43,7 +48,6 @@ func Encode(s string) (string, error) {
 	var index int
 	var strVal string
 
-	base := big.NewInt(int64(len(dictionary)))
 	a := big.NewInt(0)
 	b := big.NewInt(0)
 	c := big.NewInt(0)
@@ -93,7 +97,6 @@ func Decode(s string) (string, error) {
 	}
 
 	bi := big.NewInt(0)
-	base := big.NewInt(int64(len(dictionary)))
 
 	exponent := 0
 	a := big.NewInt(0)
