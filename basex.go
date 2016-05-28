@@ -93,8 +93,8 @@ func Decode(s string) (string, error) {
 	for _, c := range chars2 {
 		a = dictMap[c]
 		intermed = intermed.Exp(base, big.NewInt(int64(exponent)), nil)
-		b = b.Mul(intermed, a)
-		bi = bi.Add(bi, b)
+		b.Mul(intermed, a)
+		bi.Add(bi, b)
 		exponent = exponent + 1
 	}
 	return bi.String(), nil
