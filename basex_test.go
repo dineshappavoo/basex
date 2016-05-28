@@ -5,6 +5,25 @@ import (
 	"testing"
 )
 
+func TestEncoding(t *testing.T) {
+	cases := []struct {
+		in  string
+		out string
+	}{
+		{"3457348753573458734583", "14RKHyDF1bU51"},
+		{"859023481234753424567890", "4IG4grdQTLpf6Y"},
+	}
+	for _, c := range cases {
+		encode, err := Encode(c.in)
+		if err != nil {
+			t.Errorf("Encode error: %q", err)
+		}
+		if encode != c.out {
+			t.Errorf("Unexpected encoding result")
+		}
+	}
+}
+
 func TestBasexSuccess(t *testing.T) {
 	cases := []struct {
 		in string
