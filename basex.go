@@ -12,10 +12,20 @@ import (
 var (
 	dictionary = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
 	base       *big.Int
+	dictMap    map[byte]*big.Int
 )
 
 func init() {
 	base = big.NewInt(int64(len(dictionary)))
+
+	//for efficiency, make a map
+	dictMap = make(map[byte]*big.Int)
+
+	j := 0
+	for _, val := range dictionary {
+		dictMap[val] = big.NewInt(int64(j))
+		j = j + 1
+	}
 }
 
 //checks if given string is a valid numeric
@@ -92,15 +102,6 @@ func decodeInt(s string) (*big.Int, error) {
 	}
 	//reverse it, coz its already reversed!
 	chars2 := reverse([]byte(s))
-
-	//for efficiency, make a map
-	dictMap := make(map[byte]*big.Int)
-
-	j := 0
-	for _, val := range dictionary {
-		dictMap[val] = big.NewInt(int64(j))
-		j = j + 1
-	}
 
 	bi := big.NewInt(0)
 
