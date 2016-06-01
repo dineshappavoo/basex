@@ -38,12 +38,8 @@ func isAsciiPrintable(s string) bool {
 	return true
 }
 
-// Encode converts the big integer to alpha id (an alphanumeric id with mixed cases)
-func Encode(s string) (string, error) {
-	//numeric validation
-	if !isValidNumeric(s) {
-		return "", errors.New("Encode string is not a valid numeric")
-	}
+// encode a big integer
+func encodeInt(remaining *big.Int) (string, error) {
 	var result []byte
 	var index int
 	var strVal string
@@ -54,9 +50,6 @@ func Encode(s string) (string, error) {
 	d := big.NewInt(0)
 
 	exponent := 1
-
-	remaining := big.NewInt(0)
-	remaining.SetString(s, 10)
 
 	for remaining.Cmp(big.NewInt(0)) != 0 {
 		a.Exp(base, big.NewInt(int64(exponent)), nil) //16^1 = 16
@@ -78,11 +71,24 @@ func Encode(s string) (string, error) {
 	return string(reverse(result)), nil
 }
 
-// Decode converts the alpha id to big integer
-func Decode(s string) (string, error) {
+// Encode converts the big integer to alpha id (an alphanumeric id with mixed cases)
+func Encode(s string) (string, error) {
+	//numeric validation
+	if !isValidNumeric(s) {
+		return "", errors.New("Encode string is not a valid numeric")
+	}
+
+	remaining := big.NewInt(0)
+	remaining.SetString(s, 10)
+
+	return encodeInt(remaining)
+}
+
+// decodeInt converts the alpha id to int
+func decodeInt(s string) (*big.Int, error) {
 	//Validate if given string is valid
 	if !isAsciiPrintable(s) {
-		return "", errors.New("Decode string is not valid.[a-z, A_Z, 0-9] only allowed")
+		return nil, errors.New("Decode string is not valid.[a-z, A_Z, 0-9] only allowed")
 	}
 	//reverse it, coz its already reversed!
 	chars2 := reverse([]byte(s))
@@ -109,6 +115,15 @@ func Decode(s string) (string, error) {
 		b = b.Mul(intermed, a)
 		bi = bi.Add(bi, b)
 		exponent = exponent + 1
+	}
+	return bi, nil
+}
+
+// Decode converts the alpha id to big integer
+func Decode(s string) (string, error) {
+	bi, err := decodeInt(s)
+	if err != nil {
+		return "", err
 	}
 	return bi.String(), nil
 }
