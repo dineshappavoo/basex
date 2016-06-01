@@ -94,6 +94,16 @@ func Encode(s string) (string, error) {
 	return encodeInt(remaining)
 }
 
+// EncodeBytes converts a byte buffer to an alpha id (an alphanumeric id with mixed cases)
+// Note that it does not pad the result with zeroes,
+// so {0,0,255} encodes the same as {255}
+func EncodeBytes(b []byte) (string, error) {
+	i := big.NewInt(0)
+	i.SetBytes(b)
+
+	return encodeInt(i)
+}
+
 // decodeInt converts the alpha id to int
 func decodeInt(s string) (*big.Int, error) {
 	//Validate if given string is valid
@@ -123,10 +133,25 @@ func decodeInt(s string) (*big.Int, error) {
 // Decode converts the alpha id to big integer
 func Decode(s string) (string, error) {
 	bi, err := decodeInt(s)
+
 	if err != nil {
 		return "", err
 	}
+
 	return bi.String(), nil
+}
+
+// Decode converts the alpha id to a byte buffer representing the original big integer.
+// It might not restitute the buffer as the one passed to EncodeBytes
+// as heading zeroes are trimmed.
+func DecodeBytes(s string) ([]byte, error) {
+	bi, err := decodeInt(s)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return bi.Bytes(), nil
 }
 
 func reverse(bs []byte) []byte {

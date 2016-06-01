@@ -1,6 +1,8 @@
 package basex
 
 import (
+	"bytes"
+	"encoding/hex"
 	"strconv"
 	"testing"
 )
@@ -48,6 +50,56 @@ func TestBasexFailure(t *testing.T) {
 	}
 }
 
+func TestBasexBytesSuccess(t *testing.T) {
+	cases := []struct {
+		in []byte
+	}{
+		{[]byte{1, 2, 3}},
+		{[]byte{255, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+		{[]byte{42}},
+		{[]byte{12, 34, 56, 78}},
+		{[]byte{}},
+	}
+	for _, c := range cases {
+		encode, err := EncodeBytes(c.in)
+		if err != nil {
+			t.Errorf("EncodeBytes error:%q", err)
+		}
+		t.Logf("EncodeBytes %q -> %q", hex.EncodeToString(c.in), encode)
+		decode, err := DecodeBytes(encode)
+		if err != nil {
+			t.Errorf("DecodeBytes error:%q", err)
+		}
+		if bytes.Compare(c.in, decode) != 0 {
+			t.Errorf("EncodeBytes(%q) == %q, DecodeBytes %q", hex.EncodeToString(c.in), encode, decode)
+		}
+	}
+}
+
+func TestBasexBytesFailure(t *testing.T) {
+	cases := []struct {
+		in []byte
+	}{
+		{[]byte{0, 1, 2, 3}},
+		{[]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 255}},
+		{[]byte{0}},
+	}
+	for _, c := range cases {
+		encode, err := EncodeBytes(c.in)
+		if err != nil {
+			t.Errorf("EncodeBytes error:%q", err)
+		}
+		t.Logf("EncodeBytes %q -> %q", hex.EncodeToString(c.in), encode)
+		decode, err := DecodeBytes(encode)
+		if err != nil {
+			t.Errorf("DecodeBytes error:%q", err)
+		}
+		if bytes.Compare(c.in, decode) == 0 {
+			t.Errorf("EncodeBytes(%q) == %q, DecodeBytes %q *THEY SHOULD BE DIFFERENT*", hex.EncodeToString(c.in), encode, decode)
+		}
+	}
+}
+
 func TestForLargeInputs(t *testing.T) {
 	for i := 1000; i < 3000000; i++ {
 		encode, err := Encode(strconv.Itoa(i))
@@ -75,5 +127,21 @@ func BenchmarkDecode(b *testing.B) {
 	s := "2aYls9bkamJJSwhr0"
 	for n := 0; n < b.N; n++ {
 		_, _ = Decode(s)
+	}
+}
+
+func BenchmarkEncodeBytes(b *testing.B) {
+	s := "9007199254740989"
+	enc, _ := Encode(s)
+	buf, _ := DecodeBytes(enc)
+	for n := 0; n < b.N; n++ {
+		_, _ = EncodeBytes(buf)
+	}
+}
+
+func BenchmarkDecodeBytes(b *testing.B) {
+	s := "2aYls9bkamJJSwhr0"
+	for n := 0; n < b.N; n++ {
+		_, _ = DecodeBytes(s)
 	}
 }
