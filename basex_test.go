@@ -49,6 +49,10 @@ func TestBasexFailure(t *testing.T) {
 }
 
 func TestForLargeInputs(t *testing.T) {
+	if testing.Short() {
+		t.Logf("skipping large input test")
+		return
+	}
 	for i := 1000; i < 3000000; i++ {
 		encode, err := Encode(strconv.Itoa(i))
 		if err != nil {
