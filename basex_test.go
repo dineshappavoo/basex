@@ -1,12 +1,15 @@
 package basex
 
 import (
+	"math/big"
 	"strconv"
 	"testing"
 )
 
-func TestBasexSuccess(t *testing.T) {
-	cases := []struct {
+var successCases []struct{ in string }
+
+func init() {
+	successCases = []struct {
 		in string
 	}{
 		{"999999999999"},
@@ -15,7 +18,10 @@ func TestBasexSuccess(t *testing.T) {
 		{"123456789012345678901234567890"},
 		{"1234"},
 	}
-	for _, c := range cases {
+}
+
+func TestBasexSuccess(t *testing.T) {
+	for _, c := range successCases {
 		encode, err := Encode(c.in)
 		if err != nil {
 			t.Errorf("Encode error:%q", err)
@@ -30,8 +36,26 @@ func TestBasexSuccess(t *testing.T) {
 	}
 }
 
+func TestBasexIntSuccess(t *testing.T) {
+	for _, c := range successCases {
+		b := big.NewInt(0)
+		b.SetString(c.in, 10)
+		encode, err := EncodeInt(b)
+		if err != nil {
+			t.Errorf("Encode error:%q", err)
+		}
+		decode, err := DecodeInt(encode)
+		if err != nil {
+			t.Errorf("Decode error:%q", err)
+		}
+		if b.Cmp(decode) != 0 {
+			t.Errorf("Encode(%q) == %q, Decode %q (b == %q)", c.in, encode, decode.String(), b.String())
+		}
+	}
+}
+
 func TestBasexFailure(t *testing.T) {
-	cases := []struct {
+	failureCases := []struct {
 		in string
 	}{
 		{"test/test/123"},
@@ -39,7 +63,7 @@ func TestBasexFailure(t *testing.T) {
 		{"https://blog.golang.org"},
 		{"http://golang.org/doc/#learning"},
 	}
-	for _, c := range cases {
+	for _, c := range failureCases {
 		encode, _ := Encode(c.in)
 		decode, _ := Decode(encode)
 		if c.in == decode {
@@ -79,5 +103,20 @@ func BenchmarkDecode(b *testing.B) {
 	s := "2aYls9bkamJJSwhr0"
 	for n := 0; n < b.N; n++ {
 		_, _ = Decode(s)
+	}
+}
+
+func BenchmarkEncodeInt(b *testing.B) {
+	var i big.Int
+	i.SetString("9007199254740989", 10)
+	for n := 0; n < b.N; n++ {
+		_, _ = EncodeInt(&i)
+	}
+}
+
+func BenchmarkDecodeInt(b *testing.B) {
+	s := "2aYls9bkamJJSwhr0"
+	for n := 0; n < b.N; n++ {
+		_, _ = DecodeInt(s)
 	}
 }

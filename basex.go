@@ -48,7 +48,7 @@ func isAsciiPrintable(s string) bool {
 	return true
 }
 
-// encode a big integer
+// encodeInt encodes a big.Int integer, the value of remaining is changed to 0 during the process
 func encodeInt(remaining *big.Int) (string, error) {
 	var result []byte
 	var index int
@@ -81,6 +81,14 @@ func encodeInt(remaining *big.Int) (string, error) {
 	return string(reverse(result)), nil
 }
 
+// EncodeInt encodes a big.Int integer
+func EncodeInt(i *big.Int) (string, error) {
+	remaining := big.NewInt(0)
+	remaining.Set(i)
+
+	return encodeInt(remaining)
+}
+
 // Encode converts the big integer to alpha id (an alphanumeric id with mixed cases)
 func Encode(s string) (string, error) {
 	//numeric validation
@@ -94,8 +102,8 @@ func Encode(s string) (string, error) {
 	return encodeInt(remaining)
 }
 
-// decodeInt converts the alpha id to int
-func decodeInt(s string) (*big.Int, error) {
+// DecodeInt converts the alpha id to a bit.Int
+func DecodeInt(s string) (*big.Int, error) {
 	//Validate if given string is valid
 	if !isAsciiPrintable(s) {
 		return nil, errors.New("Decode string is not valid.[a-z, A_Z, 0-9] only allowed")
@@ -122,7 +130,7 @@ func decodeInt(s string) (*big.Int, error) {
 
 // Decode converts the alpha id to big integer
 func Decode(s string) (string, error) {
-	bi, err := decodeInt(s)
+	bi, err := DecodeInt(s)
 	if err != nil {
 		return "", err
 	}
