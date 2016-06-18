@@ -41,7 +41,7 @@ func isValidNumeric(s string) bool {
 // checks if s is ascii and printable, aka doesn't include tab, backspace, etc.
 func isAsciiPrintable(s string) bool {
 	for _, r := range s {
-		if r > unicode.MaxASCII || !unicode.IsPrint(r) {
+		if r > unicode.MaxASCII || !unicode.IsPrint(r) || unicode.IsPunct(r) {
 			return false
 		}
 	}
