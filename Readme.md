@@ -9,52 +9,80 @@ Or how to create IDs similar to YouTube e.g. yzNjIBEdyww
 
 The alphabet has 26 characters. That's a lot more than 10 digits. If we also distinguish upper- and lowercase, and add digits to the bunch for the heck of it, we already have (26 x 2 + 10) 62 options we can use per position in the ID. Please note that this package only takes numeric inputs.
 
-####Note: As of 11/14/2015 version 0.1.0 has a breaking change which has new 'error' return type.
+####Note: 
+	11/14/2015 version 0.1.0 has a breaking change which has new 'error' return type.
+	06/17/2016 version 0.1.1 has new functions EncodeInt and DecodeInt for processing big integers directly.
 
 ###Usage
-
 ```go
 package main
 
 import (
-	"github.com/dineshappavoo/basex"
-	"fmt"
+        "fmt"
+        "math/big"
+        "github.com/dineshappavoo/basex"
 )
 
 func main() {
-	input := "123456789012345678901234567890"
-	fmt.Println("Input : ", input)
+        input := "123456789012345678901234567890"
+        inputBigInt := big.NewInt(0)
+        inputBigInt.SetString(input, 10)
 
-	encoded, err := basex.Encode(input)
-        if err!=nil {
-            fmt.Println(err)
+        fmt.Println("Input : ", input)
+
+        // encode and decode functions
+        encoded, err := basex.Encode(input)
+        if err != nil {
+                fmt.Println(err)
         }
-	fmt.Println("Encoded : ", encoded)
+        fmt.Println("Encoded : ", encoded)
 
-	decoded, err := basex.Decode(encoded)
-        if err!=nil {
-            fmt.Println(err)
+        decoded, err := basex.Decode(encoded)
+        if err != nil {
+                fmt.Println(err)
         }
-	fmt.Println("Decoded : ", decoded)
+        fmt.Println("Decoded : ", decoded)
 
-	if input == decoded {
-		fmt.Println("Passed! decoded value is the same as the original. All set to Gooooooooo!!!")
-	} else {
-		fmt.Println("FAILED! decoded value is NOT the same as the original!!")
-	}
+        if input == decoded {
+                fmt.Println("Passed! decoded value is the same as the original.")
+        } else {
+                fmt.Println("FAILED! decoded value is NOT the same as the original!!")
+        }
+
+        // encode int and decode int functions
+        encodedInt, err := basex.EncodeInt(inputBigInt)
+        if err != nil {
+                fmt.Println(err)
+        }
+        fmt.Println("Encoded using big int: ", encodedInt)
+
+        decodedInt, err := basex.DecodeInt(encodedInt)
+        if err != nil {
+                fmt.Println(err)
+        }
+        fmt.Println("Decoded using big int: ", decodedInt)
+
+        if inputBigInt.Cmp(decodedInt) == 0 {
+                fmt.Println("Passed! decoded int value is the same as the intput big int.")
+        } else {
+                fmt.Println("FAILED! decoded int value is NOT the same as the original!!")
+        }
 }
 ```
 
 ####output looks like,
 
 ```go
-Input :  3457348753573458734583
-Encoded :  14RKHyDF1bU51
-Decoded :  3457348753573458734583
-Passed! decoded value is the same as the original. All set to Gooooooooo!!!
+Input :  123456789012345678901234567890
+
+Encoded :  2aYls9bkamJJSwhr0
+Decoded :  123456789012345678901234567890
+Passed! decoded value is the same as the original.
+
+Encoded using big int:  2aYls9bkamJJSwhr0
+Decoded using big int:  123456789012345678901234567890
+Passed! decoded int value is the same as the intput big int.
 ```
-
-
 
 ##Install
 
@@ -69,3 +97,5 @@ go get github.com/dineshappavoo/basex
 
 * Dinesh Appavoo ([@DineshAppavoo](https://twitter.com/DineshAppavoo))
 * Daved ([@Daved](https://github.com/daved))
+* Christian Mauduit ([@ufootorg](https://twitter.com/ufootorg)) 
+* Jim Tittsler ([@jtittsler](https://twitter.com/jtittsler))
