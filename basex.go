@@ -33,6 +33,7 @@ func init() {
 	}
 }
 
+//Init initialized baseX with a passKey
 func Init(pass string) {
 	dictionary, dictMap = encDictionary(pass)
 }
@@ -180,16 +181,23 @@ func (ms multiSorter) Less(i, j int) bool {
 }
 
 func encDictionary(passKey string) (nDictionary []byte, nDictMap map[byte]*big.Int) {
+	//Get SHA256 of the passKey
 	h := sha256.New()
 	h.Write([]byte(passKey))
 	sha := hex.EncodeToString(h.Sum(nil))
+
+	//If the length is less that dictionary, use 512
 	if len(sha) < len(dictionary) {
 		h = sha512.New()
 		h.Write([]byte(passKey))
 		sha = hex.EncodeToString(h.Sum(nil))
 	}
+
+	//truncate the sha to the size of dictionary
 	shaSlice := strings.Split(sha[:len(dictionary)], "")
-	items := make([]Item, 0)
+
+	//Sort sha, return the dictionary that is sorted based on sha
+	var items []Item
 	for k, char := range shaSlice {
 		i := Item{char, string(dictionary[k])}
 		items = append(items, i)
@@ -200,7 +208,6 @@ func encDictionary(passKey string) (nDictionary []byte, nDictMap map[byte]*big.I
 	for k, item := range items {
 		nDictionary[k] = byte(item.key[0])
 		nDictMap[byte(item.key[0])] = big.NewInt(int64(k))
-
 	}
 	return
 }
