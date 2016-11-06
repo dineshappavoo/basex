@@ -3,9 +3,14 @@
 package basex
 
 import (
+	"crypto/sha256"
+	"crypto/sha512"
+	"encoding/hex"
 	"errors"
 	"math/big"
+	"sort"
 	"strconv"
+	"strings"
 	"unicode"
 )
 
@@ -26,6 +31,10 @@ func init() {
 		dictMap[val] = big.NewInt(int64(j))
 		j = j + 1
 	}
+}
+
+func Init(pass string) {
+	dictionary, dictMap = encDictionary(pass)
 }
 
 //checks if given string is a valid numeric
@@ -142,4 +151,56 @@ func reverse(bs []byte) []byte {
 		bs[i], bs[j] = bs[j], bs[i]
 	}
 	return bs
+}
+
+// Item is used to multi sort the hash keys
+type Item struct {
+	shaKey string
+	key    string
+}
+
+type multiSorter []Item
+
+func (ms multiSorter) Len() int {
+	items := []Item(ms)
+	return len(items)
+}
+
+func (ms multiSorter) Swap(i, j int) {
+	items := []Item(ms)
+	items[i], items[j] = items[j], items[i]
+}
+
+func (ms multiSorter) Less(i, j int) bool {
+	items := []Item(ms)
+	if c := strings.Compare(items[i].shaKey, items[j].shaKey); c == -1 {
+		return true
+	}
+	return false
+}
+
+func encDictionary(passKey string) (nDictionary []byte, nDictMap map[byte]*big.Int) {
+	h := sha256.New()
+	h.Write([]byte(passKey))
+	sha := hex.EncodeToString(h.Sum(nil))
+	if len(sha) < len(dictionary) {
+		h = sha512.New()
+		h.Write([]byte(passKey))
+		sha = hex.EncodeToString(h.Sum(nil))
+	}
+	shaSlice := strings.Split(sha[:len(dictionary)], "")
+	items := make([]Item, 0)
+	for k, char := range shaSlice {
+		i := Item{char, string(dictionary[k])}
+		items = append(items, i)
+	}
+	sort.Sort(multiSorter(items))
+	nDictionary = make([]byte, len(dictionary))
+	nDictMap = make(map[byte]*big.Int)
+	for k, item := range items {
+		nDictionary[k] = byte(item.key[0])
+		nDictMap[byte(item.key[0])] = big.NewInt(int64(k))
+
+	}
+	return
 }
