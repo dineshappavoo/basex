@@ -9,11 +9,11 @@ Or how to create IDs similar to YouTube e.g. yzNjIBEdyww
 
 The alphabet has 26 characters. That's a lot more than 10 digits. If we also distinguish upper- and lowercase, and add digits to the bunch for the heck of it, we already have (26 x 2 + 10) 62 options we can use per position in the ID. Please note that this package only takes numeric inputs.
 
-####Note: 
+#### Note: 
 	11/14/2015 version 0.1.0 has a breaking change which has new 'error' return type.
 	06/17/2016 version 0.1.1 has new functions EncodeInt and DecodeInt for processing big integers directly.
 
-###Usage
+### Usage
 ```go
 package main
 
@@ -70,7 +70,7 @@ func main() {
 }
 ```
 
-####output looks like,
+#### output looks like,
 
 ```go
 Input :  123456789012345678901234567890
@@ -84,16 +84,16 @@ Decoded using big int:  123456789012345678901234567890
 Passed! decoded int value is the same as the intput big int.
 ```
 
-##Install
+## Install
 
 ```shell
 go get github.com/dineshappavoo/basex
 ```
-##Referrence
+## Referrence
 * [Kevin van Zonneveld's Blog](http://kvz.io/blog/2009/06/10/create-short-ids-with-php-like-youtube-or-tinyurl/)
 
   
-##Project Contributor(s)
+## Project Contributor(s)
 
 * Dinesh Appavoo ([@DineshAppavoo](https://twitter.com/DineshAppavoo))
 * Daved ([@Daved](https://github.com/daved))
