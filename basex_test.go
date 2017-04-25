@@ -92,6 +92,51 @@ func TestForLargeInputs(t *testing.T) {
 	}
 }
 
+func TestBasexPassDifers(t *testing.T) {
+	n := "12345"
+	pass := "baseXisAwesome@123"
+	pass2 := "aAbBcCdD1!2@3#"
+
+	enc, err := Encode(n)
+	if err != nil {
+		t.Errorf("Encode error:%q", err)
+	}
+
+	Init(pass)
+	passEnc, err := Encode(n)
+	if err != nil {
+		t.Errorf("Encode error:%q", err)
+	}
+	if passEnc == enc {
+		t.Errorf("Encoded values same with and without password for %s with pass %s", n, pass)
+	}
+
+	Init(pass2)
+	passEnc2, err := Encode(n)
+	if err != nil {
+		t.Errorf("Encode error:%q", err)
+	}
+	if passEnc2 == passEnc || passEnc2 == enc {
+		t.Errorf("Encoded values same with and without password for %s with pass %s", n, pass)
+	}
+}
+func TestBasexSuccessWithPass(t *testing.T) {
+	passwords := []string{
+		"aaaaaaaaaaa",
+		"baseXisAwesome@123",
+		"twofdsa33212889#$@",
+		"",
+		"1",
+		"123445",
+	}
+	for _, pass := range passwords {
+		t.Run("With Pass: "+pass, func(t *testing.T) {
+			Init(pass)
+			TestBasexSuccess(t)
+		})
+	}
+}
+
 func BenchmarkEncode(b *testing.B) {
 	s := "9007199254740989"
 	for n := 0; n < b.N; n++ {
